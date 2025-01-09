@@ -9,7 +9,7 @@ import * as z from "zod";
 import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { authApi } from '../../api/auth';
+import { authApi } from '../../api/auth-api';
 import { useState } from 'react';
 import { useAuthStore } from "../../store/auth-store";
 

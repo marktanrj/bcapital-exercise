@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authApi } from '../api/auth';
+import { authApi } from '../api/auth-api';
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
