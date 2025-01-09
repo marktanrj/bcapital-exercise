@@ -1,3 +1,5 @@
+import { UserTable } from "../user/user.model";
+
 export interface Database {
-  // todo
+  user: UserTable;
 }

@@ -1,6 +1,7 @@
 export interface AppConfig {
   port: number;
   environment: string;
+  sessionSecret: string;
   database: DatabaseConfig;
 }
 

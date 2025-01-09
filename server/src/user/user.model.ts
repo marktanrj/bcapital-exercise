@@ -8,7 +8,7 @@ export interface UserTable {
   id: string;
   username: string;
   email: string;
-  password: string;
+  hashedPassword: string;
   role: UserRole;
   lastActiveDate: Date;
   updatedAt: ColumnType<Date, Date | null, Date | null>;
