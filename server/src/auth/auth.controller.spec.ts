@@ -10,7 +10,6 @@ describe('AuthController', () => {
 
   const mockSession = {
     userId: null,
-    email: null,
     username: null,
     destroy: jest.fn((cb) => cb()),
   };
@@ -26,7 +25,6 @@ describe('AuthController', () => {
 
   const mockUserInfo = {
     id: '123',
-    email: 'test@example.com',
     username: 'testuser',
   };
 
@@ -48,14 +46,12 @@ describe('AuthController', () => {
   afterEach(() => {
     jest.clearAllMocks();
     mockSession.userId = null;
-    mockSession.email = null;
     mockSession.username = null;
   });
 
   describe('register', () => {
     it('should register a new user and set session data', async () => {
       const registerDto: RegisterDto = {
-        email: 'test@example.com',
         username: 'testuser',
         password: 'password123',
       };
@@ -67,7 +63,6 @@ describe('AuthController', () => {
       expect(authService.register).toHaveBeenCalledWith(registerDto);
       expect(result).toEqual(mockUserInfo);
       expect(mockSession.userId).toBe(mockUserInfo.id);
-      expect(mockSession.email).toBe(mockUserInfo.email);
       expect(mockSession.username).toBe(mockUserInfo.username);
     });
   });
@@ -86,7 +81,6 @@ describe('AuthController', () => {
       expect(authService.login).toHaveBeenCalledWith(loginDto);
       expect(result).toEqual(mockUserInfo);
       expect(mockSession.userId).toBe(mockUserInfo.id);
-      expect(mockSession.email).toBe(mockUserInfo.email);
       expect(mockSession.username).toBe(mockUserInfo.username);
     });
   });
