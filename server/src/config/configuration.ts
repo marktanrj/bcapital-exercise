@@ -1,7 +1,7 @@
 import { AppConfig } from './configuration.type';
 
 export default (): AppConfig => ({
-  port: Number(process.env.PORT) || 3000,
+  port: Number(process.env.PORT) || 4000,
   environment: process.env.NODE_ENV || 'development',
   sessionSecret: process.env.SESSION_SECRET || 'secret-key',
   database: {

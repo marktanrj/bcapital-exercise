@@ -28,6 +28,6 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
-  await app.listen(3000);
+  await app.listen(configService.getOrThrow('port'));
 }
 bootstrap();
