@@ -42,12 +42,4 @@ export class UserRepository {
       .selectAll()
       .executeTakeFirst();
   }
-
-  async findByUsername(username: string) {
-    return await this.dbService.db
-      .selectFrom('user')
-      .where('username', '=', username)
-      .selectAll()
-      .executeTakeFirst();
-  }
 }
