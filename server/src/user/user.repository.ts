@@ -44,15 +44,15 @@ export class UserRepository {
   async findById(id: string) {
     return await this.dbService.db
       .selectFrom('user')
-      .where('id', '==', id)
+      .where('id', '=', id)
       .selectAll()
       .executeTakeFirst();
   }
 
-  async findByEmail(email: string) {
+  async findByUsername(username: string) {
     return await this.dbService.db
       .selectFrom('user')
-      .where('email', '==', email)
+      .where('username', '=', username)
       .selectAll()
       .executeTakeFirst();
   }

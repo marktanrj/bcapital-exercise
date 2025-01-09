@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../user/user.repository';
 import { LoginDto, RegisterDto } from './auth.dto';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +41,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     try {
-      const user = await this.userRepository.findByEmail(loginDto.email);
+      const user = await this.userRepository.findByUsername(loginDto.username);
       
       if (!user) {
         throw new UnauthorizedException('Invalid credentials');
@@ -62,7 +62,7 @@ export class AuthService {
         username: user.username
       };
     } catch (error) {
-      this.logger.error('Registration error:', error);
+      this.logger.error('Login error:', error);
       throw error;
     }
   }
