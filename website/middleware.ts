@@ -5,7 +5,7 @@ const protectedRoutes = [
   '/chat',
 ]
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const sessionCookie = request.cookies.get('sessionId')?.value
   
@@ -13,19 +13,38 @@ export function middleware(request: NextRequest) {
     path.startsWith(route)
   )
 
-  // redirect to login if user is in root
-  if (path === '/' && !sessionCookie) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // if protected route and has sessionId, validate it with backend
+  if (isProtectedRoute && sessionCookie) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+        headers: {
+          Cookie: `sessionId=${sessionCookie}`
+        },
+        credentials: 'include'
+      })
+      
+      if (!response.ok) {
+        // invalid session - clear cookie and redirect
+        const response = NextResponse.redirect(new URL('/login', request.url))
+        response.cookies.delete('sessionId')
+        return response
+      }
+    } catch {
+      // API error - redirect to login?
+      const response = NextResponse.redirect(new URL('/login', request.url))
+      response.cookies.delete('sessionId')
+      return response
+    }
   }
 
-  // if user is trying to access protected route without token
+  // handle redirects for unauthenticated users
   if (isProtectedRoute && !sessionCookie) {
     const url = new URL('/login', request.url)
     url.searchParams.set('from', path)
     return NextResponse.redirect(url)
   }
 
-  // if user goes to login or root but has token, redirect to chat 
+  // redirect authenticated users away from login
   if (['/login', '/'].includes(path) && sessionCookie) {
     return NextResponse.redirect(new URL('/chat', request.url))
   }

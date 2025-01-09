@@ -13,12 +13,12 @@ export const authApi = {
   },
   
   logout: async () => {
-    const response = await api.post('/logout');
+    const response = await api.post('/auth/logout');
     return response.data;
   },
 
   me: async () => {
-    const response = await api.get('/me')
+    const response = await api.get('/auth/me')
     return response.data;
   }
 };
