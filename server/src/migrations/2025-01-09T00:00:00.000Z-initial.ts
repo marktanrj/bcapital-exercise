@@ -9,8 +9,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('user')
     .addColumn('id', 'uuid', (col) => col.primaryKey().defaultTo(sql`uuid_generate_v4()`))
     .addColumn('username', 'varchar(50)', (col) => col.notNull())
-    .addColumn('email', 'varchar(254)')
-    .addColumn('password', 'varchar(60)')
+    .addColumn('email', 'varchar(254)', (col) => col.notNull())
+    .addColumn('password', 'varchar(60)', (col) => col.notNull())
     .addColumn('role', 'varchar(20)', (col) => col.notNull().defaultTo(UserRole.GENERAL))
     .addColumn('lastActiveDate', 'timestamp', (col) => col.notNull())
     .addColumn('updatedAt', 'timestamp', (col) => {
