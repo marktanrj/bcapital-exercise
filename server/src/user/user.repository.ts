@@ -6,25 +6,19 @@ import { NewUser, UserRole } from './user.model';
 export class UserRepository {
   constructor(private readonly dbService: DbService) {}
 
-  async findByEmailOrUsername(email: string, username: string) {
+  async findByUsername(username: string) {
     const user = await this.dbService.db
       .selectFrom('user')
-      .where(eb => eb
-        .or([
-          eb('email', '=', email.toLowerCase()),
-          eb('username', '=', username.toLowerCase())
-        ])
-      )
+      .where('username', '=', username.toLowerCase())
       .selectAll()
       .executeTakeFirst();
 
     return user;
   }
 
-  async create(data: { email: string; username: string; hashedPassword: string }) {
+  async create(data: { username: string; hashedPassword: string }) {
     const newUser: NewUser = {
       username: data.username.toLowerCase(),
-      email: data.email.toLowerCase(),
       hashedPassword: data.hashedPassword,
       role: UserRole.GENERAL,
       lastActiveDate: new Date(),

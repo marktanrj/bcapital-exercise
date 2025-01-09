@@ -11,26 +11,21 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     try {
-      const existingUser = await this.userRepository.findByEmailOrUsername(
-        registerDto.email,
-        registerDto.username,
-      );
+      const existingUser = await this.userRepository.findByUsername(registerDto.username);
   
       if (existingUser) {
-        throw new ConflictException('Email or username already exists');
+        throw new ConflictException('Username already exists');
       }
   
       const hashedPassword = await bcrypt.hash(registerDto.password, 10);
   
       const user = await this.userRepository.create({
-        email: registerDto.email,
         username: registerDto.username,
         hashedPassword,
       });
   
       return {
         id: user.id,
-        email: user.email,
         username: user.username
       };
     } catch (error) {
@@ -58,7 +53,6 @@ export class AuthService {
   
       return {
         id: user.id,
-        email: user.email,
         username: user.username
       };
     } catch (error) {

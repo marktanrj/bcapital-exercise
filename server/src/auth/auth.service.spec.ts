@@ -12,14 +12,12 @@ describe('AuthService', () => {
 
   const mockUser = {
     id: '1',
-    email: 'test@example.com',
     username: 'testuser',
     hashedPassword: 'hashedPassword123'
   } as any;
 
   beforeEach(async () => {
     const mockUserRepository = {
-      findByEmailOrUsername: jest.fn(),
       findByUsername: jest.fn(),
       create: jest.fn(),
     };
@@ -40,7 +38,6 @@ describe('AuthService', () => {
 
   describe('register', () => {
     const registerDto = {
-      email: 'test@example.com',
       username: 'testuser',
       password: 'password123'
     };
@@ -50,31 +47,28 @@ describe('AuthService', () => {
     });
 
     it('should successfully register a new user', async () => {
-      userRepository.findByEmailOrUsername.mockResolvedValue(null);
+      userRepository.findByUsername.mockResolvedValue(null);
       userRepository.create.mockResolvedValue(mockUser);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword123');
 
       const result = await service.register(registerDto);
 
-      expect(userRepository.findByEmailOrUsername).toHaveBeenCalledWith(
-        registerDto.email,
+      expect(userRepository.findByUsername).toHaveBeenCalledWith(
         registerDto.username
       );
       expect(bcrypt.hash).toHaveBeenCalledWith(registerDto.password, 10);
       expect(userRepository.create).toHaveBeenCalledWith({
-        email: registerDto.email,
         username: registerDto.username,
         hashedPassword: 'hashedPassword123'
       });
       expect(result).toEqual({
         id: mockUser.id,
-        email: mockUser.email,
         username: mockUser.username
       });
     });
 
     it('should throw ConflictException if user already exists', async () => {
-      userRepository.findByEmailOrUsername.mockResolvedValue(mockUser);
+      userRepository.findByUsername.mockResolvedValue(mockUser);
 
       await expect(service.register(registerDto)).rejects.toThrow(
         ConflictException
@@ -84,7 +78,7 @@ describe('AuthService', () => {
 
     it('should propagate repository errors', async () => {
       const error = new Error('Database error');
-      userRepository.findByEmailOrUsername.mockRejectedValue(error);
+      userRepository.findByUsername.mockRejectedValue(error);
 
       await expect(service.register(registerDto)).rejects.toThrow(error);
     });
@@ -115,7 +109,6 @@ describe('AuthService', () => {
       );
       expect(result).toEqual({
         id: mockUser.id,
-        email: mockUser.email,
         username: mockUser.username
       });
     });

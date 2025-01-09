@@ -7,7 +7,6 @@ export enum UserRole {
 export interface UserTable {
   id: string;
   username: string;
-  email: string;
   hashedPassword: string;
   role: UserRole;
   lastActiveDate: Date;

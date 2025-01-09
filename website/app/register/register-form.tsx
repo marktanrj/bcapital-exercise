@@ -10,7 +10,6 @@ import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  email: z.string(),
   username: z.string().min(3, {
     message: "Must be at least 3 characters.",
   }).max(50, {
@@ -27,7 +26,6 @@ export function RegisterForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
       username: "",
       password: "",
     },

@@ -13,7 +13,6 @@ export class AuthController {
     const userInfo = await this.authService.register(registerDto);
 
     req.session.userId = userInfo.id;
-    req.session.email = userInfo.email;
     req.session.username = userInfo.username;
 
     return userInfo;
@@ -25,7 +24,6 @@ export class AuthController {
     const userInfo = await this.authService.login(loginDto);
     
     req.session.userId = userInfo.id;
-    req.session.email = userInfo.email;
     req.session.username = userInfo.username;
 
     return userInfo;
