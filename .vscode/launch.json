@@ -18,5 +18,22 @@
       ],
       "console": "integratedTerminal"
     },
+    {
+      "name": "Run Test File (Server)",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceFolder}/server",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "test",
+        "--",
+        "${file}",
+        "--testTimeout=3600000"
+      ],
+      "console": "integratedTerminal"
+    },
   ]
 }
