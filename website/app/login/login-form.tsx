@@ -2,12 +2,16 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card } from "../components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/ui/form";
-import { Input } from "../components/ui/input";
+import { Card } from "../../components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
 import * as z from "zod";
-import { Button } from "../components/ui/button";
+import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { loginUser } from '../../lib/auth';
+import { useState } from 'react';
+import { useAuthStore } from "../../store/auth-store";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -22,6 +26,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
+  const [error, setError] = useState<string>('');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -30,9 +36,21 @@ export function LoginForm() {
       password: "",
     },
   });
+  
+  const loginMutation = useMutation({
+    mutationFn: (data: FormValues) => loginUser(data.username, data.password),
+    onSuccess: (data) => {
+      setUser(data.user);
+      router.push('/chat');
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      setError(error.response?.data?.message || 'Login failed');
+    },
+  });
 
   const onClickLogin = (data: FormValues) => {
-    console.log(data);
+    loginMutation.mutate(data);
   };
 
   return (
@@ -71,9 +89,10 @@ export function LoginForm() {
           />
 
           <Button type="submit" className="w-full m-0">Login</Button>
-          <Button variant="default" onClick={() => router.push('/register')} className="w-full m-0">Register</Button>
+          <Button type="button" variant="default" onClick={() => router.push('/register')} className="w-full m-0">Register</Button>
         </form>
       </Form>
+      {error && <div className="text-red-500 text-sm">{error}</div>}
     </Card>
   );
 }
