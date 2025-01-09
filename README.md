@@ -21,9 +21,8 @@ Ensure you have the following installed:
 
 1. Configure your environment
     ```
-    cp .env.example .env` 
+    cp .env.example .env.development
     ```
-    note: defaults to `.env.developemnt` if `.env` is not present
 
 1.  Start PostgreSQL database 
     ```
