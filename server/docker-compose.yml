@@ -1,3 +1,4 @@
+name: mark-chatbot-app
 version: '3'
 services:
   db:
@@ -7,4 +8,4 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: chat-app
+      POSTGRES_DB: mark-chatbot-app
