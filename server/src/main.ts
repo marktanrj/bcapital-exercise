@@ -4,12 +4,14 @@ import { ConfigService } from '@nestjs/config';
 import { getSessionConfig } from './config/session.config';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { getLogger } from './config/logger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
   app.use(getSessionConfig(configService));
+  app.useLogger(getLogger());
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, // strips away non-whitelisted properties
@@ -23,6 +25,8 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
+
+  app.enableShutdownHooks();
 
   await app.listen(3000);
 }
