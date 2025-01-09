@@ -1,9 +1,9 @@
-import session, { SessionOptions } from 'express-session';
+import * as expressSession from 'express-session';
 import { ConfigService } from '@nestjs/config';
 import { RequestHandler } from 'express';
 
 export const getSessionConfig = (configService: ConfigService): RequestHandler  => {
-  const sessionOptions: SessionOptions = {
+  const sessionOptions: expressSession.SessionOptions = {
     // TODO: redis for prod?
     // store: new RedisStore({ 
     //   client: redisClient,
@@ -20,5 +20,5 @@ export const getSessionConfig = (configService: ConfigService): RequestHandler  
     }
   }
   
-  return session(sessionOptions);
+  return expressSession(sessionOptions);
 };
