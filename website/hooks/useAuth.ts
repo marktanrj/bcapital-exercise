@@ -1,6 +1,8 @@
+'use client'
+
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCurrentUser } from '../lib/auth';
+import { authApi } from '../api/auth';
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -9,7 +11,7 @@ export function useAuth() {
 
   const checkAuth = useCallback(async () => {
     try {
-      const userInfo = await getCurrentUser();
+      const userInfo = await authApi.me();
       if (!userInfo) {
         router.push('/login')
       }

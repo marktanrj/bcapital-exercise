@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode } from 'react'
 import { useAuth } from '../hooks/useAuth';
 import { LoadingSpinner } from './ui/spinner';

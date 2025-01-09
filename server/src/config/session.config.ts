@@ -9,6 +9,7 @@ export const getSessionConfig = (configService: ConfigService): RequestHandler  
     //   client: redisClient,
     // }),
     
+    name: 'sessionId',
     secret: configService.getOrThrow('sessionSecret'),
     resave: false,
     saveUninitialized: false,

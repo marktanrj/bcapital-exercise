@@ -9,7 +9,7 @@ import * as z from "zod";
 import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { registerUser } from '../../lib/auth';
+import { authApi } from '../../api/auth';
 import { useState } from 'react';
 import { useAuthStore } from "../../store/auth-store";
 
@@ -38,9 +38,9 @@ export function RegisterForm() {
   });
 
   const registerMutation = useMutation({
-    mutationFn: (data: FormValues) => registerUser(data.username, data.password),
+    mutationFn: (data: FormValues) => authApi.register(data.username, data.password),
     onSuccess: (data) => {
-      setUser(data.user);
+      setUser(data);
       router.push('/chat');
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
