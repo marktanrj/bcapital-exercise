@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { HttpStatus } from '@nestjs/common';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { LoginDto, SignUpDto } from './auth.dto';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -19,7 +18,7 @@ describe('AuthController', () => {
   };
 
   const mockAuthService = {
-    register: jest.fn(),
+    signUp: jest.fn(),
     login: jest.fn(),
   };
 
@@ -49,18 +48,18 @@ describe('AuthController', () => {
     mockSession.username = null;
   });
 
-  describe('register', () => {
-    it('should register a new user and set session data', async () => {
-      const registerDto: RegisterDto = {
+  describe('sign up', () => {
+    it('should sign up a new user and set session data', async () => {
+      const signUpDto: SignUpDto = {
         username: 'testuser',
         password: 'password123',
       };
 
-      mockAuthService.register.mockResolvedValue(mockUserInfo);
+      mockAuthService.signUp.mockResolvedValue(mockUserInfo);
 
-      const result = await controller.register(registerDto, mockRequest as any);
+      const result = await controller.signUp(signUpDto, mockRequest as any);
 
-      expect(authService.register).toHaveBeenCalledWith(registerDto);
+      expect(authService.signup).toHaveBeenCalledWith(signUpDto);
       expect(result).toEqual(mockUserInfo);
       expect(mockSession.userId).toBe(mockUserInfo.id);
       expect(mockSession.username).toBe(mockUserInfo.username);

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { LoginDto, SignUpDto } from './auth.dto';
 import { Request } from 'express';
 import { SessionGuard } from './auth.guard';
 import { User } from '../user/user.decorator';
@@ -9,10 +9,10 @@ import { User } from '../user/user.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('register')
+  @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerDto: RegisterDto, @Req() req: Request) {
-    const userInfo = await this.authService.register(registerDto);
+  async signUp(@Body() signUpDto: SignUpDto, @Req() req: Request) {
+    const userInfo = await this.authService.signup(signUpDto);
 
     req.session.userId = userInfo.id;
     req.session.username = userInfo.username;

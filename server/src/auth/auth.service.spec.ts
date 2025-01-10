@@ -36,8 +36,8 @@ describe('AuthService', () => {
     userRepository = module.get(UserRepository);
   });
 
-  describe('register', () => {
-    const registerDto = {
+  describe('sign up', () => {
+    const signUpDto = {
       username: 'testuser',
       password: 'password123'
     };
@@ -46,19 +46,19 @@ describe('AuthService', () => {
       jest.clearAllMocks();
     });
 
-    it('should successfully register a new user', async () => {
+    it('should successfully sign up a new user', async () => {
       userRepository.findByUsername.mockResolvedValue(null);
       userRepository.create.mockResolvedValue(mockUser);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword123');
 
-      const result = await service.register(registerDto);
+      const result = await service.signup(signUpDto);
 
       expect(userRepository.findByUsername).toHaveBeenCalledWith(
-        registerDto.username
+        signUpDto.username
       );
-      expect(bcrypt.hash).toHaveBeenCalledWith(registerDto.password, 10);
+      expect(bcrypt.hash).toHaveBeenCalledWith(signUpDto.password, 10);
       expect(userRepository.create).toHaveBeenCalledWith({
-        username: registerDto.username,
+        username: signUpDto.username,
         hashedPassword: 'hashedPassword123'
       });
       expect(result).toEqual({
@@ -70,7 +70,7 @@ describe('AuthService', () => {
     it('should throw ConflictException if user already exists', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
 
-      await expect(service.register(registerDto)).rejects.toThrow(
+      await expect(service.signup(signUpDto)).rejects.toThrow(
         ConflictException
       );
       expect(userRepository.create).not.toHaveBeenCalled();
@@ -80,7 +80,7 @@ describe('AuthService', () => {
       const error = new Error('Database error');
       userRepository.findByUsername.mockRejectedValue(error);
 
-      await expect(service.register(registerDto)).rejects.toThrow(error);
+      await expect(service.signup(signUpDto)).rejects.toThrow(error);
     });
   });
 
