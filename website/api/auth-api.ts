@@ -1,7 +1,7 @@
 import { api } from "./base-api";
 
 export type UserData = {
-  id: string;
+  userId: string;
   username: string;
 }
 
