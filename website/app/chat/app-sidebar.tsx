@@ -1,8 +1,11 @@
+'use client'
+
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,6 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Button } from "../../components/ui/button"
+import { useLogout } from "../../hooks/use-logout";
 
 // Menu items.
 const items = [
@@ -42,6 +46,12 @@ const items = [
 ]
 
 export function AppSidebar() {
+  const { logout } = useLogout();
+
+  const onClickLogout = () => {
+    logout();
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -64,6 +74,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <Button className="w-full" onClick={onClickLogout}>Log Out</Button>
+      </SidebarFooter>
     </Sidebar>
   )
 }
