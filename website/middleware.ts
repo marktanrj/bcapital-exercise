@@ -38,14 +38,14 @@ export async function middleware(request: NextRequest) {
   }
 
   // handle redirects for unauthenticated users
-  if (isProtectedRoute && !sessionCookie) {
+  if ((isProtectedRoute || path === '/') && !sessionCookie) {
     const url = new URL('/login', request.url)
-    url.searchParams.set('from', path)
     return NextResponse.redirect(url)
   }
 
   // redirect authenticated users away from login
   if (['/login', '/'].includes(path) && sessionCookie) {
+    console.log('etst');
     return NextResponse.redirect(new URL('/chat', request.url))
   }
 
@@ -56,7 +56,7 @@ export const config = {
   matcher: [
     '/',
     '/login',
-    '/register',
+    '/sign-up',
     '/chat',
   ]
 }

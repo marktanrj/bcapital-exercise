@@ -1,56 +1,36 @@
 'use client'
 
+import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card } from "../../components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
-import { Input } from "../../components/ui/input";
-import * as z from "zod";
-import { Button } from "../../components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { authApi } from '../../api/auth-api';
-import { useState } from 'react';
-import { useAuthStore } from "../../store/auth-store";
+import { useLogin } from "../../hooks/use-login";
 
-const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "Must be at least 3 characters.",
-  }).max(50, {
-    message: "Must be at most 50 characters.",
-  }),
+const loginFormSchema = z.object({
+  username: z.string().min(3).max(50),
   password: z.string(),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export function LoginForm() {
   const router = useRouter();
-  const setUser = useAuthStore((state) => state.setUser);
-  const [error, setError] = useState<string>('');
+  const { login, error, isLoading } = useLogin();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: "",
       password: "",
     },
   });
   
-  const loginMutation = useMutation({
-    mutationFn: (data: FormValues) => authApi.login(data.username, data.password),
-    onSuccess: (data) => {
-      setUser(data);
-      router.push('/chat');
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      setError(error.response?.data?.message || 'Login failed');
-    },
-  });
-
-  const onClickLogin = (data: FormValues) => {
-    loginMutation.mutate(data);
+  const onClickLogin = (data: LoginFormValues) => {
+    login(data);
   };
 
   return (
@@ -59,7 +39,15 @@ export function LoginForm() {
       <div className="text-md">Login</div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onClickLogin)} className="w-full space-y-6">
+        <form 
+          onSubmit={form.handleSubmit(onClickLogin)} 
+          className="w-full space-y-6"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && isLoading) {
+              e.preventDefault();
+            }
+          }}
+        >
           <FormField
             control={form.control}
             name="username"
@@ -67,7 +55,11 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="Username" {...field} />
+                  <Input 
+                    placeholder="Username" 
+                    {...field} 
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,18 +73,43 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="Password" type="password" {...field} />
+                  <Input 
+                    placeholder="Password" 
+                    type="password" 
+                    {...field} 
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full m-0">Login</Button>
-          <Button type="button" variant="default" onClick={() => router.push('/register')} className="w-full m-0">Register</Button>
+          <Button 
+            type="submit" 
+            className="w-full m-0" 
+            disabled={isLoading}
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
+          </Button>
+          
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => router.push('/sign-up')} 
+            className="w-full m-0"
+            disabled={isLoading}
+          >
+            Sign Up
+          </Button>
         </form>
       </Form>
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+
+      {error && 
+        <div className="text-red-500 text-sm rounded-md p-2 bg-red-50">
+          {error}
+        </div>
+      }
     </Card>
   );
 }
