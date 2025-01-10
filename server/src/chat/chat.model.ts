@@ -4,7 +4,7 @@ export interface ChatTable {
   id: string;
   userId: string;
   title: string;
-  lastAcitivityAt: ColumnType<Date, Date | null, Date | null>;
+  lastActivityAt: ColumnType<Date, Date | null, Date | null>;
   createdAt: ColumnType<Date, Date | null, Date | null>;
 }
 
