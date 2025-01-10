@@ -10,7 +10,7 @@ export class MessageController {
 
   @Get(':chatId/messages')
   @HttpCode(HttpStatus.OK)
-  async getRecentMessages(
+  async getMessages(
     @Param('chatId') chatId: string,
     @Query() query: MessageQueryDto
   ) {

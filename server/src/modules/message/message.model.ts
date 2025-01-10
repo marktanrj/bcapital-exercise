@@ -1,8 +1,8 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export enum MessageRole {
-  USER = 'USER',
-  SYSTEM = 'SYSTEM',
+  USER = 'user',
+  ASSISTANT = 'assistant',
 }
 
 export interface MessageTable {

@@ -79,4 +79,22 @@ export class ChatService {
       throw error;
     }
   }
+
+  async getOrCreateChat(userId: string, chatId: string) {
+    try {
+      let chat = await this.chatRepository.findById(chatId);
+      if (!chat) {
+        chat = await this.chatRepository.create({
+          id: chatId,
+          userId,
+          title: chatId,
+        });;
+      }
+
+      return chat;
+    } catch (error) {
+      this.logger.error('Get recent chats error:', error);
+      throw error;
+    }
+  }
 }

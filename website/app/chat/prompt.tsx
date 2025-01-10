@@ -5,13 +5,20 @@ import { Card } from "../../components/ui/card";
 import { Textarea } from "../../components/ui/textarea";
 import { Button } from "../../components/ui/button";
 import { CornerRightUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCreateChat } from "../../hooks/chat/use-create-chat";
+import { format } from "date-fns";
+import { useChatStore } from "../../store/chat-store";
 
 const PLACEHOLDER_PROMPT = 'How can I help you?';
 const MAX_HEIGHT = 300;
 
 export default function Prompt() {
-  const [value, setValue] = useState('');
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { mutateAsync: createChat } = useCreateChat();
+  const { prompt, setPrompt, setIsNewPrompt } = useChatStore();
 
   // resize height of textarea if there are more lines
   useEffect(() => {
@@ -23,11 +30,29 @@ export default function Prompt() {
       
       textareaRef.current.style.height = `${newHeight}px`;
     }
-  }, [value]);
+  }, [prompt]);
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
-    if (event.key === 'Enter') {
-      console.log('Enter key pressed!');
+  const handleSubmit = async () => {
+    if (!prompt.trim() || isSubmitting) return;
+
+    setIsNewPrompt(true);
+    setIsSubmitting(true);
+    try {
+      const newChat = await createChat({
+        title: `New Chat-${format(new Date(), 'yyMMdd-HHmmss')}`
+      });
+
+      router.push(`/chat/${newChat.id}`);
+    } catch (error) {
+      console.error('Error creating chat:', error);
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit();
     }
   };
 
@@ -35,23 +60,27 @@ export default function Prompt() {
     <Card className="w-full grid grid-cols-[1fr_40px] p-5 md:w-[600px] border-[1.5px] shadow-xl">
       <Textarea
         ref={textareaRef}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder={PLACEHOLDER_PROMPT}
+        disabled={isSubmitting}
         className="w-full resize-none border-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 shadow-none transition-height duration-200 !text-xl"
         style={{
           minHeight: '100px',
           maxHeight: `${MAX_HEIGHT}px`,
-          overflow: value.length > 0 ? 'auto' : 'hidden',
+          overflow: prompt.length > 0 ? 'auto' : 'hidden',
         }}
       />
-      {
-        value.length ?
-          <Button onKeyDown={handleKeyDown} className="h-11">
-            <CornerRightUp className="w-4 h-11" />
-          </Button> 
-          : null
-      }
+      {prompt.length > 0 && (
+        <Button 
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className="h-11"
+        >
+          <CornerRightUp className="w-4 h-11" />
+        </Button>
+      )}
     </Card>
-  )
+  );
 }
