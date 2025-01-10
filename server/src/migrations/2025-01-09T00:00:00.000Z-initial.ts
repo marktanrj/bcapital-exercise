@@ -1,5 +1,5 @@
 import { Kysely, sql } from 'kysely';
-import { UserRole } from '../user/user.model';
+import { UserRole } from '../modules/user/user.model';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`.execute(db);
