@@ -38,7 +38,7 @@ export function SignUpForm() {
   };
 
   return (
-    <Card className="flex flex-col items-center gap-5 p-6 w-72 md:w-96">
+    <Card className="flex flex-col items-center gap-5 p-6 w-72 md:w-96 shadow-xl">
       <div className="text-2xl">ChatBot App</div>
       <div className="text-md">Sign Up</div>
 
