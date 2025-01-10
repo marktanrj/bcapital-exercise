@@ -17,8 +17,7 @@ export class ChatController {
     @User() user,
     @Query() query: GetChatsQueryDto
   ) {
-    const parsedLimit = query.limit || 30;
-    return this.chatService.getRecentChats(user.id, parsedLimit);
+    return this.chatService.getRecentChats(user.id, query.limit);
   }
 
   @Post()

@@ -71,10 +71,6 @@ export class ChatService {
 
   async getRecentChats(userId: string, limit: number) {
     try {
-      if (limit <= 0 || limit > this.MAX_CHATS_LIMIT) {
-        throw new BadRequestException(`Limit must be between 1 and ${this.MAX_CHATS_LIMIT}`);
-      }
-
       const chats = await this.chatRepository.findRecentByUserId(userId, limit);
 
       return plainToInstance(ChatResponseDto, chats, { excludeExtraneousValues: true });

@@ -1,6 +1,6 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
-enum MessageRole {
+export enum MessageRole {
   USER = 'USER',
   SYSTEM = 'SYSTEM',
 }

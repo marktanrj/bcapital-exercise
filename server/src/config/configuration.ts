@@ -17,4 +17,8 @@ export default (): AppConfig => ({
         }
       : false,
   },
+  anthropic: {
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    model: 'claude-3-5-haiku-20241022',
+  }
 });

@@ -22,6 +22,7 @@
     "db:migrate:dev:undo": "cross-env NODE_ENV=development pnpm exec ts-node ./src/scripts/rollback-migrations.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.33.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.0",

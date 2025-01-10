@@ -3,6 +3,7 @@ export interface AppConfig {
   environment: string;
   sessionSecret: string;
   database: DatabaseConfig;
+  anthropic: AnthropicConfig;
 }
 
 export interface DatabaseConfig {
@@ -17,4 +18,9 @@ export interface DatabaseConfig {
         ca: string;
       }
     | boolean;
+}
+
+export interface AnthropicConfig {
+  apiKey: string;
+  model: string; // https://docs.anthropic.com/en/docs/about-claude/models
 }
