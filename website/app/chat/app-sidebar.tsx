@@ -1,7 +1,5 @@
 'use client'
 
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -10,72 +8,79 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Button } from "../../components/ui/button"
-import { useLogout } from "../../hooks/use-logout";
+import { useLogout } from "../../hooks/auth/use-logout";
+import { Chat } from "../../api/chat-api";
+import { useChats, useCreateChat } from "../../hooks/chat";
+import { useParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { format } from 'date-fns';
+import { ChatMenuButton } from "./chat-menu-button";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-]
+const getNewChatTitle = () => {
+  return `New Chat-${format(new Date(), 'yyMMdd-HHmmss')}`;
+}
 
 export function AppSidebar() {
+  const queryClient = useQueryClient();
   const { logout } = useLogout();
+  const router = useRouter();
+  const params = useParams()
 
-  const onClickLogout = () => {
-    logout();
+  const { data: chats, isLoading } = useChats(30);
+  const { mutate: createChat, isPending: isCreating } = useCreateChat();
+
+  const handleNewChat = () => {
+    createChat(
+      { title: getNewChatTitle() },
+      {
+        onSuccess: (newChat) => {
+          queryClient.invalidateQueries({ queryKey: ['chats', 'list'] }); 
+          router.push(`/chat/${newChat.id}`);
+        },
+      }
+    );
   };
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <Button>New Chat</Button>
-          <SidebarGroupLabel className="mt-3">Conversations</SidebarGroupLabel>
+          <Button
+            onClick={handleNewChat} 
+            disabled={isCreating}
+          >
+            New Chat
+          </Button>
+          <SidebarGroupLabel className="mt-3">Recent Chats</SidebarGroupLabel>
+
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {isLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  loading..
+                </div>
+              ) : chats?.length === 0 ? (
+                <div className="px-3 py-2 text-sm text-muted-foreground">
+                  No chats yet
+                </div>
+              ) : (
+                chats?.map((chat: Chat) => 
+                  <ChatMenuButton
+                    key={chat.id}
+                    chat={chat}
+                    currentId={params.id}
+                  />
+                )
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
+
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <Button className="w-full" onClick={onClickLogout}>Log Out</Button>
+        <Button className="w-full" onClick={logout}>Log Out</Button>
       </SidebarFooter>
     </Sidebar>
   )

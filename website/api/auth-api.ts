@@ -1,5 +1,9 @@
-import { UserData } from "../types/types";
 import { api } from "./base-api";
+
+export type UserData = {
+  id: string;
+  username: string;
+}
 
 export const authApi = {
   login: async (username: string, password: string) => {
@@ -18,7 +22,7 @@ export const authApi = {
   },
 
   me: async () => {
-    const response = await api.get('/auth/me')
+    const response = await api.get<UserData>('/auth/me')
     return response.data;
   }
 };

@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
-import { useLogin } from "../../hooks/use-login";
+import { useLogin } from "../../hooks/auth/use-login";
 
 const loginFormSchema = z.object({
   username: z.string().min(3).max(50),

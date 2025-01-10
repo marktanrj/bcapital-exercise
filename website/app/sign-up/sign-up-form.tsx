@@ -8,7 +8,7 @@ import { Input } from "../../components/ui/input";
 import * as z from "zod";
 import { Button } from "../../components/ui/button";
 import { useRouter } from 'next/navigation';
-import { useSignUp } from "../../hooks/use-sign-up";
+import { useSignUp } from "../../hooks/auth/use-sign-up";
 
 const formSchema = z.object({
   username: z.string().min(3, {
