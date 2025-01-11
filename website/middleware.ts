@@ -20,6 +20,15 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const sessionCookie = request.cookies.get('sessionId')?.value
   
+  // check if this is a logout redirect
+  const isLoggingOut = request.headers.get('referer')?.includes('/logout') || 
+                      request.headers.get('x-logout') === 'true';
+
+  // if logging out, allow redirect to login without checking session
+  if (isLoggingOut) {
+    return NextResponse.next();
+  }
+
   const isProtectedRoute = protectedRoutes.some(route => 
     path.startsWith(route)
   )
@@ -64,10 +73,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
     '/login',
-    '/sign-up',
-    '/chat',
     '/chat/:path*'
   ]
 }
