@@ -4,12 +4,12 @@ import { RequestHandler } from 'express';
 import { RedisStore } from 'connect-redis';
 import { CacheProvider } from '../cache/cache.provider';
 
-export const getSessionConfig = (configService: ConfigService): RequestHandler => {
+export const getSessionConfig = (configService: ConfigService, cacheProvider: CacheProvider): RequestHandler => {
   const sessionOptions: expressSession.SessionOptions = {
-    // store: new RedisStore({ 
-    //   client: cacheProvider.getClient(),
-    //   prefix: 'session:',
-    // }),
+    store: new RedisStore({ 
+      client: cacheProvider.getClient(),
+      prefix: 'session:',
+    }),
     name: 'sessionId',
     secret: configService.getOrThrow('sessionSecret'),
     resave: false,
