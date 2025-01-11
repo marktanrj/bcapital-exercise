@@ -180,16 +180,16 @@ src/                    # NestJS app
 │   ├── auth/
 │   │   ├── dto/                    # data transfer objects
 │   │   ├── auth.controller.ts     
-│   │   ├── auth.guard.ts
+│   │   ├── auth.guard.ts           # Session auth
 │   │   ├── auth.module.ts
 │   │   ├── auth.service.ts
 │   │   └── auth.type.ts
-│   ├── chat/
+│   ├── chat/                       # Chat CRUD
 │   │   ├── chat.model.ts
 │   │   └── chat.repository.ts
-│   ├── message/
-│   ├── stream/
-│   └── user/
+│   ├── message/                    # Message CRUD
+│   ├── stream/                     # SSE stream
+│   └── user/                       # User CRUD
 ├── scripts             # Migration scripts
 ├── types               
 ├── app.controller.ts
