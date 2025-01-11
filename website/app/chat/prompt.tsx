@@ -7,7 +7,6 @@ import { Button } from "../../components/ui/button";
 import { CornerRightUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCreateChat } from "../../hooks/chat/use-create-chat";
-import { format } from "date-fns";
 import { useChatShared } from "../../providers/chat-provider";
 import { PLACEHOLDER_PROMPT } from "../../constants/constants";
 import { motion } from "framer-motion";
@@ -41,7 +40,7 @@ export default function Prompt() {
     setIsSubmitting(true);
     try {
       const newChat = await createChat({
-        title: `New Chat-${format(new Date(), 'yyMMdd-HHmmss')}`
+        title: input.slice(0, 40),
       });
 
       router.push(`/chat/${newChat.id}`);
