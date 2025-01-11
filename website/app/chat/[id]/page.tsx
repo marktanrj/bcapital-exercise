@@ -41,10 +41,10 @@ export default function ChatWindow() {
 
   // if user submits a new prompt from prompt page
   useEffect(() => {
-    if (isInitialMount.current && input.length) {
+    if (isInitialMount.current && input.length && chatId?.length) {
       handleSubmit();
+      isInitialMount.current = false;
     }
-    isInitialMount.current = false;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
