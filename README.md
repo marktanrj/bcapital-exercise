@@ -57,6 +57,11 @@ Ensure you have the following installed:
     pnpm install
     ```
 
+1.  Run database migrations
+    ```
+    pnpm db:migrate:dev
+    ```
+
 1.  Start the server locally
     ```
     pnpm dev
