@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useLogin } from "../../hooks/auth/use-login";
 
 const loginFormSchema = z.object({
-  username: z.string().min(3).max(50),
+  username: z.string().max(50),
   password: z.string(),
 });
 

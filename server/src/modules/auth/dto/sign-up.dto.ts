@@ -11,6 +11,7 @@ export class SignUpDto {
   username: string;
 
   @IsString()
+  @MinLength(6)
   @ApiProperty()
   password: string;
 }

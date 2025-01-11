@@ -16,7 +16,9 @@ const formSchema = z.object({
   }).max(50, {
     message: "Must be at most 50 characters.",
   }),
-  password: z.string(),
+  password: z.string().min(6, {
+    message: "Must be at least 6 characters.",
+  }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
