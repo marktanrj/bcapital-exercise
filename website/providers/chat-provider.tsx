@@ -2,6 +2,7 @@
 
 import { useChat } from "ai/react";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { API_CONFIG } from "../api/config";
 
 const ChatContext = createContext<ReturnType<typeof useChat> & 
   { chatId: string | null, setChatId: (chatId: string) => void } 
@@ -19,17 +20,11 @@ export function ChatProvider({
 
   const chat = useChat({
     streamProtocol: 'data',
-    api: `http://localhost:4000/stream/chat`,
+    api: `${API_CONFIG.baseURL}/stream/chat`,
     body: {
       chatId,
     },
     credentials: 'include',
-    onResponse: (response) => {
-      console.log('Stream response started:', response);
-    },
-    onFinish: (message) => {
-      console.log('Stream finished:', message);
-    },
   });
 
   const value = {
