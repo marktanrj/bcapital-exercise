@@ -8,20 +8,16 @@ export interface AppConfig {
 }
 
 export interface DatabaseConfig {
+  url: string;
   host: string;
   port: number;
   user: string;
   password: string;
   database: string;
-  ssl:
-    | {
-        rejectUnauthorized: boolean;
-        ca: string;
-      }
-    | boolean;
 }
 
 export interface CacheConfig {
+  url: string;
   host: string;
   port: number;
 }

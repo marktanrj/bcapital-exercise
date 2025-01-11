@@ -45,7 +45,6 @@ export async function middleware(request: NextRequest) {
 
   // redirect authenticated users away from login
   if (['/login', '/'].includes(path) && sessionCookie) {
-    console.log('etst');
     return NextResponse.redirect(new URL('/chat', request.url))
   }
 

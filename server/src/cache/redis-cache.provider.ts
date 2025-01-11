@@ -9,11 +9,15 @@ export class RedisCacheProvider extends CacheProvider {
 
   constructor(private readonly configService: ConfigService) {
     super();
-    this.client = new Redis({
-      host: this.configService.getOrThrow('cache.host'),
-      port: this.configService.getOrThrow('cache.port'),
+
+    const redisConfig = this.configService.get('cache');
+
+    this.client = new Redis(redisConfig.url, {
+      ...(redisConfig.url ? {} : { host: redisConfig.host, port: redisConfig.port }),
       retryStrategy: (times) => Math.min(times * 50, 5000),
     });
+
+    console.log(redisConfig);
 
     this.client.on('error', (error) => {
       this.logger.error('Redis client error:', error);

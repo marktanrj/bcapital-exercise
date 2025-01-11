@@ -21,8 +21,19 @@ export class DbService implements OnModuleInit {
   setUpDatabase() {
     this.logger.log('Connecting to database');
 
+    const dbConfig = this.configService.getOrThrow('database');
+    const poolConfig = dbConfig.url 
+      ? { connectionString: dbConfig.url }
+      : {
+          host: dbConfig.host,
+          port: dbConfig.port,
+          user: dbConfig.user,
+          password: dbConfig.password,
+          database: dbConfig.database,
+        };
+
     const dialect = new PostgresDialect({
-      pool: new Pool(this.configService.getOrThrow('database')),
+      pool: new Pool(poolConfig),
     });
 
     this.db = new Kysely<Database>({
