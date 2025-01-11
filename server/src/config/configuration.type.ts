@@ -2,6 +2,7 @@ export interface AppConfig {
   port: number;
   environment: string;
   sessionSecret: string;
+  frontendUrl: string;
   database: DatabaseConfig;
   cache: CacheConfig;
   anthropic: AnthropicConfig;

@@ -5,6 +5,8 @@ import { RedisStore } from 'connect-redis';
 import { CacheProvider } from '../cache/cache.provider';
 
 export const getSessionConfig = (configService: ConfigService, cacheProvider: CacheProvider): RequestHandler => {
+  const isProd = process.env.NODE_ENV === 'production';
+
   const sessionOptions: expressSession.SessionOptions = {
     store: new RedisStore({ 
       client: cacheProvider.getClient(),
@@ -16,9 +18,10 @@ export const getSessionConfig = (configService: ConfigService, cacheProvider: Ca
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProd,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       sameSite: 'lax',
+      domain: isProd ? '.marksite.xyz' : undefined,
     },
   };
 

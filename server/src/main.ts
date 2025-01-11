@@ -13,7 +13,7 @@ async function bootstrap() {
   const cacheProvider = app.get(CacheProvider);
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: configService.get('frontendUrl'),
     credentials: true,
   });
 
