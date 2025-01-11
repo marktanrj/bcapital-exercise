@@ -31,6 +31,7 @@ async function bootstrap() {
     }),
   );
 
+  // swagger docs
   const config = new DocumentBuilder().setTitle('Chatbot App').setVersion('1.0').build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

@@ -13,14 +13,14 @@ Ensure you have the following installed:
 ## Tech Stack
 
 - TypeScript - For type-safe development
-- Next.js - React framework
+- Next.js - Modern frontend React framework
 - Nest.js - Node.js framework for scalable backend
-- PostgreSQL - Relatiotnal database
+- PostgreSQL - Relational database
 - Redis - In-memory store for caching
 - TailwindCSS - Styling
 - Kysely - Type-safe SQL query builder for TypeScript
 - Anthropic - LLM API integration
-- Vercel AI SDK - Wrapper for AI chat functions
+- Vercel AI SDK - Wrapper for AI chat functionalities
 
 ## Local Development Setup
 
@@ -80,7 +80,16 @@ Ensure you have the following installed:
     pnpm dev
     ```
 
-1. Visit http://localhost:3000/login
+## Local Links
+
+1. App: http://localhost:3000
+1. Swagger API Docs: http://localhost:4000/api
+
+## Deployment
+
+The app is hosted on Railway
+
+![Railway Hosting](./images/hosting.jpg)
 
 ## Architecture Diagram
 
@@ -212,3 +221,19 @@ website/
 ├── .env.example
 └── middleware.ts      # Handles protected routes 
 ```
+
+## Security
+
+1. Secure session management via cookies
+1. Server-side data validation using DTOs and class-validator
+1. Protected API routes with NestJS guards
+1. Configured CORS policy for API endpoints
+1. Client-side route protection using Next.js middleware
+
+## Future considerations
+
+Planned but not implemented due to time constraints:
+- Lint staged commits with Husky for enforced code style
+- Automated testing via CI pipeline like Github actions
+- Frontend Testing with Cypress/Jest
+- Better OOP/SOLID patterns in backend, database models and interfaces could follow Dependency Inversion Principle
