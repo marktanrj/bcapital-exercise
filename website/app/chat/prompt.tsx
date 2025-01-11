@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { useCreateChat } from "../../hooks/chat/use-create-chat";
 import { format } from "date-fns";
 import { useChatShared } from "../../providers/chat-provider";
+import { PLACEHOLDER_PROMPT } from "../../constants/constants";
 
-const PLACEHOLDER_PROMPT = 'How can I help you?';
 const MAX_HEIGHT = 300;
 
 export default function Prompt() {
