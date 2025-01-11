@@ -19,7 +19,7 @@ export class AuthController {
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto, @Req() req: Request) {
-    const userInfo = await this.authService.signup(signUpDto);
+    const userInfo = await this.authService.signUp(signUpDto);
 
     req.session.userId = userInfo.id;
     req.session.username = userInfo.username;

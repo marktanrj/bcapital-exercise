@@ -3,6 +3,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { LoginDto } from './dto/login.dto';
+import { UserRepository } from '../user/user.repository';
+import { SessionGuard } from './auth.guard';
+import { DbService } from '../../database/db.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -14,8 +18,13 @@ describe('AuthController', () => {
     destroy: jest.fn((cb) => cb()),
   };
 
+  const mockResponse = {
+    clearCookie: jest.fn(),
+  };
+
   const mockRequest = {
     session: mockSession,
+    res: mockResponse,
   };
 
   const mockAuthService = {
@@ -28,13 +37,33 @@ describe('AuthController', () => {
     username: 'testuser',
   };
 
+  const mockDbService = {
+    findByUsername: jest.fn(),
+    create: jest.fn(),
+    findById: jest.fn(),
+  };
+
+  const mockConfigService = {
+    get: jest.fn(),
+  }
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
+        UserRepository,
+        SessionGuard,
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: DbService,
+          useValue: mockDbService,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();
@@ -60,7 +89,7 @@ describe('AuthController', () => {
 
       const result = await controller.signUp(signUpDto, mockRequest as any);
 
-      expect(authService.signup).toHaveBeenCalledWith(signUpDto);
+      expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
       expect(result).toEqual(mockUserInfo);
       expect(mockSession.userId).toBe(mockUserInfo.id);
       expect(mockSession.username).toBe(mockUserInfo.username);

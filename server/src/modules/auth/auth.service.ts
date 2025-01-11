@@ -10,7 +10,7 @@ export class AuthService {
 
   constructor(private userRepository: UserRepository) {}
 
-  async signup(signUp: SignUpDto) {
+  async signUp(signUp: SignUpDto) {
     try {
 
       const existingUser = await this.userRepository.findByUsername(signUp.username);

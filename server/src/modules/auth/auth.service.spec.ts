@@ -49,9 +49,9 @@ describe('AuthService', () => {
     it('should successfully sign up a new user', async () => {
       userRepository.findByUsername.mockResolvedValue(null);
       userRepository.create.mockResolvedValue(mockUser);
-      (bcrypt.hashSync as jest.Mock).mockResolvedValue('hashedPassword123');
+      (bcrypt.hashSync as jest.Mock).mockReturnValue('hashedPassword123');
 
-      const result = await service.signup(signUpDto);
+      const result = await service.signUp(signUpDto);
 
       expect(userRepository.findByUsername).toHaveBeenCalledWith(signUpDto.username);
       expect(bcrypt.hashSync).toHaveBeenCalledWith(signUpDto.password, 10);
@@ -68,7 +68,7 @@ describe('AuthService', () => {
     it('should throw ConflictException if user already exists', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
 
-      await expect(service.signup(signUpDto)).rejects.toThrow(ConflictException);
+      await expect(service.signUp(signUpDto)).rejects.toThrow(ConflictException);
       expect(userRepository.create).not.toHaveBeenCalled();
     });
 
@@ -76,7 +76,7 @@ describe('AuthService', () => {
       const error = new Error('Database error');
       userRepository.findByUsername.mockRejectedValue(error);
 
-      await expect(service.signup(signUpDto)).rejects.toThrow(error);
+      await expect(service.signUp(signUpDto)).rejects.toThrow(error);
     });
   });
 
@@ -113,7 +113,7 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException if password is invalid', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
-      (bcrypt.compareSync as jest.Mock).mockResolvedValue(false);
+      (bcrypt.compareSync as jest.Mock).mockReturnValue(false);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
