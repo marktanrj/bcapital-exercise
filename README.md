@@ -96,6 +96,8 @@ The app is hosted on Railway
 
 ![Railway Hosting](./images/hosting.jpg)
 
+- Commits pushed to `production` branch will deploy to Railway automatically
+
 ## Architecture Diagram
 
 ```mermaid
