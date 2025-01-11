@@ -10,14 +10,17 @@ import { CacheProvider } from './cache/cache.provider';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  // const cacheProvider = app.get(CacheProvider);
+  const cacheProvider = app.get(CacheProvider);
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: configService.get('frontendUrl'),
     credentials: true,
+    exposedHeaders: ['Set-Cookie'],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'],
   });
 
-  app.use(getSessionConfig(configService));
+  app.use(getSessionConfig(configService, cacheProvider));
   app.useLogger(getLogger());
 
   app.useGlobalPipes(

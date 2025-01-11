@@ -5,10 +5,30 @@ const protectedRoutes = [
   '/chat',
 ]
 
+const isApiRequest = (request: NextRequest) => {
+  return request.nextUrl.pathname.startsWith('/api') || 
+    request.nextUrl.hostname.startsWith('api.') ||
+    request.headers.get('accept')?.includes('application/json');
+}
+
 export async function middleware(request: NextRequest) {
+  // skip middleware for API requests
+  if (isApiRequest(request)) {
+    return NextResponse.next();
+  }
+
   const path = request.nextUrl.pathname
   const sessionCookie = request.cookies.get('sessionId')?.value
   
+  // check if this is a logout redirect
+  const isLoggingOut = request.headers.get('referer')?.includes('/logout') || 
+                      request.headers.get('x-logout') === 'true';
+
+  // if logging out, allow redirect to login without checking session
+  if (isLoggingOut) {
+    return NextResponse.next();
+  }
+
   const isProtectedRoute = protectedRoutes.some(route => 
     path.startsWith(route)
   )

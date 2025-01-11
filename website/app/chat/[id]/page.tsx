@@ -11,6 +11,10 @@ import { PLACEHOLDER_PROMPT } from '../../../constants/constants';
 import { CornerRightUp } from 'lucide-react';
 import { useChatScroll } from '../../../hooks/use-chat-scroll';
 import { ChatMessage } from './chat-message';
+import { motion } from 'framer-motion';
+
+const MotionCard = motion(Card);
+const MotionTextarea = motion(Textarea);
 
 export default function ChatWindow() {
   const params = useParams<{ id: string }>()
@@ -41,12 +45,12 @@ export default function ChatWindow() {
 
   // if user submits a new prompt from prompt page
   useEffect(() => {
-    if (isInitialMount.current && input.length) {
+    if (isInitialMount.current && input.length && chatId?.length) {
       handleSubmit();
+      isInitialMount.current = false;
     }
-    isInitialMount.current = false;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chatId]);
 
   // populate old messages
   useEffect(() => {
@@ -82,10 +86,19 @@ export default function ChatWindow() {
           />)
         )}
       </div>
-      <div className='flex justify-center items-center h-36 sticky bottom-0'>
-        <Card className='p-5 w-full h-full border-2 shadow-xl'>
+      <motion.div 
+        layout
+        className='flex justify-center items-center h-36 sticky bottom-0'
+      >
+        <MotionCard 
+          layout
+          layoutId="shared-textarea-card"
+          className='p-5 w-full h-full border-2 shadow-xl'
+        >
           <form onSubmit={handleSubmit} className="flex gap-2">
-            <Textarea
+            <MotionTextarea
+              layout
+              layoutId="shared-textarea"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -106,8 +119,8 @@ export default function ChatWindow() {
               <CornerRightUp className="w-4 h-11" />
             </Button>
           </form>
-        </Card>
-      </div>  
+        </MotionCard>
+      </motion.div>  
     </div>
   );
 }
