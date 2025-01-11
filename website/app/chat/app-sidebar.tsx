@@ -19,13 +19,19 @@ import { ChatMenuButton } from "./chat-menu-button";
 export function AppSidebar() {
   const { logout } = useLogout();
   const router = useRouter();
-  const params = useParams()
+  const params = useParams();
 
-  const { data: chats, isLoading } = useChats(30);
+  const { 
+    data: chats, 
+    isLoading, 
+  } = useChats(30);
 
   const handleNewChat = () => {
     router.push('/chat');
   };
+
+  const showLoadingState = isLoading && !(chats || [])?.length;
+  const showEmptyState = !isLoading && chats?.length === 0;
 
   return (
     <Sidebar>
@@ -34,30 +40,32 @@ export function AppSidebar() {
           <Button onClick={handleNewChat}>
             New Chat
           </Button>
-          <SidebarGroupLabel className="mt-3">Recent Chats</SidebarGroupLabel>
+          
+          <SidebarGroupLabel className="mt-3">
+            <span>Recent Chats</span>
+          </SidebarGroupLabel>
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {isLoading ? (
+              {showLoadingState ? (
                 <div className="flex items-center justify-center py-4">
                   loading..
                 </div>
-              ) : chats?.length === 0 ? (
+              ) : showEmptyState ? (
                 <div className="px-3 py-2 text-sm text-muted-foreground">
                   No chats yet
                 </div>
               ) : (
-                chats?.map((chat: Chat) => 
+                chats?.map((chat: Chat) => (
                   <ChatMenuButton
                     key={chat.id}
                     chat={chat}
                     currentId={params.id}
                   />
-                )
+                ))
               )}
             </SidebarMenu>
           </SidebarGroupContent>
-
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
@@ -66,5 +74,5 @@ export function AppSidebar() {
         </Button>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
