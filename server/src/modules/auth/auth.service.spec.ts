@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserRepository } from '../user/user.repository';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
-jest.mock('bcrypt');
+jest.mock('bcryptjs');
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -49,12 +49,12 @@ describe('AuthService', () => {
     it('should successfully sign up a new user', async () => {
       userRepository.findByUsername.mockResolvedValue(null);
       userRepository.create.mockResolvedValue(mockUser);
-      (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword123');
+      (bcrypt.hashSync as jest.Mock).mockResolvedValue('hashedPassword123');
 
       const result = await service.signup(signUpDto);
 
       expect(userRepository.findByUsername).toHaveBeenCalledWith(signUpDto.username);
-      expect(bcrypt.hash).toHaveBeenCalledWith(signUpDto.password, 10);
+      expect(bcrypt.hashSync).toHaveBeenCalledWith(signUpDto.password, 10);
       expect(userRepository.create).toHaveBeenCalledWith({
         username: signUpDto.username,
         hashedPassword: 'hashedPassword123',
@@ -92,12 +92,12 @@ describe('AuthService', () => {
 
     it('should successfully login a user with valid credentials', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (bcrypt.compareSync as jest.Mock).mockResolvedValue(true);
 
       const result = await service.login(loginDto);
 
       expect(userRepository.findByUsername).toHaveBeenCalledWith(loginDto.username);
-      expect(bcrypt.compare).toHaveBeenCalledWith(loginDto.password, mockUser.hashedPassword);
+      expect(bcrypt.compareSync).toHaveBeenCalledWith(loginDto.password, mockUser.hashedPassword);
       expect(result).toEqual({
         id: mockUser.id,
         username: mockUser.username,
@@ -108,12 +108,12 @@ describe('AuthService', () => {
       userRepository.findByUsername.mockResolvedValue(null);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
-      expect(bcrypt.compare).not.toHaveBeenCalled();
+      expect(bcrypt.compareSync).not.toHaveBeenCalled();
     });
 
     it('should throw UnauthorizedException if password is invalid', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
-      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+      (bcrypt.compareSync as jest.Mock).mockResolvedValue(false);
 
       await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
