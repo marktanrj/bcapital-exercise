@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { SessionGuard } from '../auth/auth.guard';
 import { User } from '../user/user.decorator';
 import { GetChatsQueryDto } from './dto/get-chats-query.dto';
@@ -13,10 +25,7 @@ export class ChatController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getRecentChats(
-    @User() user,
-    @Query() query: GetChatsQueryDto
-  ) {
+  async getRecentChats(@User() user, @Query() query: GetChatsQueryDto) {
     return this.chatService.getRecentChats(user.id, query.limit);
   }
 

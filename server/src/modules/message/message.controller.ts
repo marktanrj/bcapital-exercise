@@ -8,12 +8,9 @@ import { MessageQueryDto } from './dto/message-query.dto';
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
-  @Get(':chatId/messages')
+  @Get(':chatId')
   @HttpCode(HttpStatus.OK)
-  async getMessages(
-    @Param('chatId') chatId: string,
-    @Query() query: MessageQueryDto
-  ) {
+  async getMessages(@Param('chatId') chatId: string, @Query() query: MessageQueryDto) {
     return this.messageService.getRecentMessages(chatId, query.limit, query.offset);
   }
 }

@@ -1,3 +1,4 @@
+import { Message } from "ai/react";
 import { api } from "./base-api";
 
 export enum MessageRole {
@@ -5,16 +6,9 @@ export enum MessageRole {
   ASSISTANT = 'assistant',
 }
 
-export type Message = {
-  id: string;
-  role: MessageRole;
-  content: string;
-  createdAt: Date;
-}
-
 export const messageApi = {
   getMessages: async (chatId: string) => {
-    const response = await api.get<Message[]>(`/messages/${chatId}/messages`);
+    const response = await api.get<Message[]>(`/messages/${chatId}`);
     return response.data;
   },
 };

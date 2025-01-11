@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { ChatRepository } from './chat.repository';
 import { plainToInstance } from 'class-transformer';
 import { ChatResponseDto } from './dto/chat-response.dto';
@@ -88,7 +94,7 @@ export class ChatService {
           id: chatId,
           userId,
           title: chatId,
-        });;
+        });
       }
 
       return chat;

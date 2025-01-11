@@ -22,6 +22,7 @@ export class MessageRepository {
       .limit(limit)
       .offset(offset)
       .selectAll()
-      .execute();
+      .execute()
+      .then((messages) => messages.reverse()); // reverse in memory to get ascending order
   }
 }

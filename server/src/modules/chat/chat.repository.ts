@@ -23,10 +23,7 @@ export class ChatRepository {
   }
 
   async deleteById(id: string) {
-    return await this.dbService.db
-      .deleteFrom('chat')
-      .where('id', '=', id)
-      .execute();
+    return await this.dbService.db.deleteFrom('chat').where('id', '=', id).execute();
   }
 
   async updateById(id: string, data: Partial<UpdateChat>) {

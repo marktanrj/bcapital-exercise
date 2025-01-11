@@ -8,7 +8,8 @@ import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [DatabaseModule, AuthModule, UserModule],
-  providers: [MessageController, MessageRepository, MessageService],
+  controllers: [MessageController],
+  providers: [MessageRepository, MessageService],
   exports: [MessageService],
 })
 export class MessageModule {}

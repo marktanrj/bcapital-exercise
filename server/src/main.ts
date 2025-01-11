@@ -18,16 +18,15 @@ async function bootstrap() {
   app.use(getSessionConfig(configService));
   app.useLogger(getLogger());
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, // strips away non-whitelisted properties
-    transform: true, // enables transformation
-    forbidNonWhitelisted: true, // throws error if non-whitelisted values are provided
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // strips away non-whitelisted properties
+      transform: true, // enables transformation
+      forbidNonWhitelisted: true, // throws error if non-whitelisted values are provided
+    }),
+  );
 
-  const config = new DocumentBuilder()
-    .setTitle('Chatbot App')
-    .setVersion('1.0')
-    .build();
+  const config = new DocumentBuilder().setTitle('Chatbot App').setVersion('1.0').build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 

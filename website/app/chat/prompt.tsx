@@ -8,7 +8,7 @@ import { CornerRightUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCreateChat } from "../../hooks/chat/use-create-chat";
 import { format } from "date-fns";
-import { useChatStore } from "../../store/chat-store";
+import { useChatShared } from "../../providers/chat-provider";
 
 const PLACEHOLDER_PROMPT = 'How can I help you?';
 const MAX_HEIGHT = 300;
@@ -18,7 +18,7 @@ export default function Prompt() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { mutateAsync: createChat } = useCreateChat();
-  const { prompt, setPrompt, setIsNewPrompt } = useChatStore();
+  const { input, setInput } = useChatShared();
 
   // resize height of textarea if there are more lines
   useEffect(() => {
@@ -30,12 +30,11 @@ export default function Prompt() {
       
       textareaRef.current.style.height = `${newHeight}px`;
     }
-  }, [prompt]);
+  }, [input]);
 
   const handleSubmit = async () => {
-    if (!prompt.trim() || isSubmitting) return;
+    if (!input.trim() || isSubmitting) return;
 
-    setIsNewPrompt(true);
     setIsSubmitting(true);
     try {
       const newChat = await createChat({
@@ -60,8 +59,8 @@ export default function Prompt() {
     <Card className="w-full grid grid-cols-[1fr_40px] p-5 md:w-[600px] border-[1.5px] shadow-xl">
       <Textarea
         ref={textareaRef}
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={PLACEHOLDER_PROMPT}
         disabled={isSubmitting}
@@ -69,10 +68,10 @@ export default function Prompt() {
         style={{
           minHeight: '100px',
           maxHeight: `${MAX_HEIGHT}px`,
-          overflow: prompt.length > 0 ? 'auto' : 'hidden',
+          overflow: input.length > 0 ? 'auto' : 'hidden',
         }}
       />
-      {prompt.length > 0 && (
+      {input.length > 0 && (
         <Button 
           onClick={handleSubmit}
           disabled={isSubmitting}

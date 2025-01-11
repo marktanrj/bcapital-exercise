@@ -1,8 +1,6 @@
-import { Controller, Sse, Body, Post, UseGuards, Param, MessageEvent } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Controller, Body, Post, UseGuards, Res } from '@nestjs/common';
 import { StreamService } from './stream.service';
 import { SessionGuard } from '../auth/auth.guard';
-import { map } from 'rxjs/operators';
 import { StreamPromptDto } from './dto/stream-prompt.dto';
 
 @Controller('stream')
@@ -10,24 +8,14 @@ import { StreamPromptDto } from './dto/stream-prompt.dto';
 export class StreamController {
   constructor(private readonly streamService: StreamService) {}
 
-  @Post('chat/:chatId/prompt')
-  async sendPrompt(
-    @Param('chatId') chatId: string,
-    @Body() streamPromptDto: StreamPromptDto,
-  ) {
-    await this.streamService.streamResponse(chatId, streamPromptDto.message);
-    return { status: 'Streaming started' };
-  }
-
-  @Sse('chat/:chatId/events')
-  events(@Param('chatId') chatId: string): Observable<MessageEvent> {
-    return this.streamService.getMessageSubject(chatId).pipe(
-      map((data) => ({
-        data,
-        id: String(Date.now()),
-        type: 'message',
-        retry: 15000,
-      })),
-    );
+  @Post('chat')
+  async chat(@Res() res: Response, @Body() streamPromptDto: StreamPromptDto) {
+    try {
+      const result = await this.streamService.streamResponse(streamPromptDto);
+      return result.pipeDataStreamToResponse(res as any);
+    } catch (error) {
+      console.error('Error in stream chat endpoint:', error);
+      throw error;
+    }
   }
 }

@@ -9,14 +9,14 @@ export class SessionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    
+
     if (!request.session || !this.hasUserId(request.session)) {
       throw new UnauthorizedException('Not authenticated');
     }
 
     try {
       const user = await this.userRepository.findById(request.session.userId);
-  
+
       if (!user) {
         await this.destroySession(request);
         throw new UnauthorizedException('User no longer exists');

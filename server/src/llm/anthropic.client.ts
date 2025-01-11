@@ -1,29 +1,27 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { MessageDto } from "../modules/message/dto/message.dto";
-import { LLMClient } from "./llm-client.abstract";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { LLMClient, StreamTextMessage, StreamTextOnFinish } from './llm-client.abstract';
+import { AnthropicProvider, createAnthropic } from '@ai-sdk/anthropic';
+import { CoreMessage, streamText } from 'ai';
 
 @Injectable()
 export class AnthropicClient implements LLMClient {
-  readonly anthropic;
-  readonly model;
+  readonly anthropic: AnthropicProvider;
+  readonly model: string;
 
-  constructor(
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.model = this.configService.getOrThrow('anthropic.model');
-    this.anthropic = new Anthropic({
+    this.anthropic = createAnthropic({
       apiKey: this.configService.getOrThrow('anthropic.apiKey'),
     });
   }
 
-  createMessageStream(messageDto: MessageDto) {
-    return this.anthropic.messages.create({
-      messages: messageDto.messages,
-      model: this.model,
-      max_tokens: 1024,
-      stream: true,
+  createMessageStream(messages: StreamTextMessage, onFinish?: StreamTextOnFinish) {
+    return streamText({
+      model: this.anthropic(this.model),
+      messages,
+      maxTokens: 1024,
+      onFinish,
     });
   }
 }

@@ -24,7 +24,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto, @Req() req: Request) {
     const userInfo = await this.authService.login(loginDto);
-    
+
     req.session.userId = userInfo.id;
     req.session.username = userInfo.username;
 
@@ -44,7 +44,7 @@ export class AuthController {
   async me(@User() user) {
     return {
       userId: user.id,
-      username: user.username
+      username: user.username,
     };
   }
 }

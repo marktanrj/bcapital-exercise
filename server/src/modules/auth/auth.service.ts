@@ -12,21 +12,21 @@ export class AuthService {
   async signup(signUp: SignUpDto) {
     try {
       const existingUser = await this.userRepository.findByUsername(signUp.username);
-  
+
       if (existingUser) {
         throw new ConflictException('Username already exists');
       }
-  
+
       const hashedPassword = await bcrypt.hash(signUp.password, 10);
-  
+
       const user = await this.userRepository.create({
         username: signUp.username,
         hashedPassword,
       });
-  
+
       return {
         id: user.id,
-        username: user.username
+        username: user.username,
       };
     } catch (error) {
       this.logger.error('Registration error:', error);
@@ -37,23 +37,20 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     try {
       const user = await this.userRepository.findByUsername(loginDto.username);
-      
+
       if (!user) {
         throw new UnauthorizedException('Invalid credentials');
       }
-  
-      const isPasswordValid = await bcrypt.compare(
-        loginDto.password,
-        user.hashedPassword
-      );
-  
+
+      const isPasswordValid = await bcrypt.compare(loginDto.password, user.hashedPassword);
+
       if (!isPasswordValid) {
         throw new UnauthorizedException('Invalid credentials');
       }
-  
+
       return {
         id: user.id,
-        username: user.username
+        username: user.username,
       };
     } catch (error) {
       this.logger.error('Login error:', error);

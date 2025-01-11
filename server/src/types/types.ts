@@ -1,5 +1,5 @@
-import { Session } from "express-session";
-import { User } from "../modules/user/user.model";
+import { Session } from 'express-session';
+import { User } from '../modules/user/user.model';
 
 declare module 'express-session' {
   interface Session {
@@ -11,6 +11,6 @@ declare module 'express-session' {
 declare module 'express' {
   interface Request {
     session: Session;
-    user: User,
+    user: User;
   }
 }

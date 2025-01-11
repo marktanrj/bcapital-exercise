@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MessageRepository } from './message.repository';
 import { NewMessage } from './message.model';
 
@@ -21,7 +21,14 @@ export class MessageService {
     try {
       const messages = await this.messageRepository.getRecentByChatId(chatId, limit, offset);
 
-      return messages;
+      const result = messages.map((message) => ({
+        id: message.id,
+        role: message.role,
+        content: message.content,
+        createdAt: message.createdAt,
+      }));
+
+      return result;
     } catch (error) {
       this.logger.error('Get recent messages error:', error);
       throw error;
@@ -31,8 +38,10 @@ export class MessageService {
   async getRecentMessagesFormattedForLLM(chatId: string, limit: number, offset: number) {
     const messages = await this.getRecentMessages(chatId, limit, offset);
     return messages.map((message) => ({
+      id: message.id,
       role: message.role,
       content: message.content,
+      createdAt: message.createdAt,
     }));
   }
 }

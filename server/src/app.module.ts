@@ -17,7 +17,7 @@ import { StreamModule } from './modules/stream/stream.module';
     UserModule,
     ChatModule,
     MessageModule,
-    StreamModule
+    StreamModule,
   ],
   controllers: [AppController],
   providers: [AppService],

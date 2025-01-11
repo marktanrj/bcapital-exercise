@@ -13,7 +13,7 @@ describe('AuthService', () => {
   const mockUser = {
     id: '1',
     username: 'testuser',
-    hashedPassword: 'hashedPassword123'
+    hashedPassword: 'hashedPassword123',
   } as any;
 
   beforeEach(async () => {
@@ -39,7 +39,7 @@ describe('AuthService', () => {
   describe('sign up', () => {
     const signUpDto = {
       username: 'testuser',
-      password: 'password123'
+      password: 'password123',
     };
 
     beforeEach(() => {
@@ -53,26 +53,22 @@ describe('AuthService', () => {
 
       const result = await service.signup(signUpDto);
 
-      expect(userRepository.findByUsername).toHaveBeenCalledWith(
-        signUpDto.username
-      );
+      expect(userRepository.findByUsername).toHaveBeenCalledWith(signUpDto.username);
       expect(bcrypt.hash).toHaveBeenCalledWith(signUpDto.password, 10);
       expect(userRepository.create).toHaveBeenCalledWith({
         username: signUpDto.username,
-        hashedPassword: 'hashedPassword123'
+        hashedPassword: 'hashedPassword123',
       });
       expect(result).toEqual({
         id: mockUser.id,
-        username: mockUser.username
+        username: mockUser.username,
       });
     });
 
     it('should throw ConflictException if user already exists', async () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
 
-      await expect(service.signup(signUpDto)).rejects.toThrow(
-        ConflictException
-      );
+      await expect(service.signup(signUpDto)).rejects.toThrow(ConflictException);
       expect(userRepository.create).not.toHaveBeenCalled();
     });
 
@@ -87,7 +83,7 @@ describe('AuthService', () => {
   describe('login', () => {
     const loginDto = {
       username: 'testuser',
-      password: 'password123'
+      password: 'password123',
     };
 
     beforeEach(() => {
@@ -100,25 +96,18 @@ describe('AuthService', () => {
 
       const result = await service.login(loginDto);
 
-      expect(userRepository.findByUsername).toHaveBeenCalledWith(
-        loginDto.username
-      );
-      expect(bcrypt.compare).toHaveBeenCalledWith(
-        loginDto.password,
-        mockUser.hashedPassword
-      );
+      expect(userRepository.findByUsername).toHaveBeenCalledWith(loginDto.username);
+      expect(bcrypt.compare).toHaveBeenCalledWith(loginDto.password, mockUser.hashedPassword);
       expect(result).toEqual({
         id: mockUser.id,
-        username: mockUser.username
+        username: mockUser.username,
       });
     });
 
     it('should throw UnauthorizedException if user not found', async () => {
       userRepository.findByUsername.mockResolvedValue(null);
 
-      await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException
-      );
+      await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
       expect(bcrypt.compare).not.toHaveBeenCalled();
     });
 
@@ -126,9 +115,7 @@ describe('AuthService', () => {
       userRepository.findByUsername.mockResolvedValue(mockUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException
-      );
+      await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
     });
 
     it('should propagate repository errors', async () => {
