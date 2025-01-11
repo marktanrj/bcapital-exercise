@@ -6,7 +6,7 @@ Live app: https://app.marksite.xyz/
 Sample Login - *Username:* `john`, *Password:* `123456`
 
 &nbsp;
-<img src="./images/demo.jpg" width="600" height="300" alt="Demo" />
+<img src="./images/demo.jpg" width="600" height="355" alt="Demo" />
 
 ## Prerequisites
 Ensure you have the following installed:
