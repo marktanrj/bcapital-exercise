@@ -5,7 +5,18 @@ const protectedRoutes = [
   '/chat',
 ]
 
+const isApiRequest = (request: NextRequest) => {
+  return request.nextUrl.pathname.startsWith('/api') || 
+    request.nextUrl.hostname.startsWith('api.') ||
+    request.headers.get('accept')?.includes('application/json');
+}
+
 export async function middleware(request: NextRequest) {
+  // skip middleware for API requests
+  if (isApiRequest(request)) {
+    return NextResponse.next();
+  }
+
   const path = request.nextUrl.pathname
   const sessionCookie = request.cookies.get('sessionId')?.value
   
