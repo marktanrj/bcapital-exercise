@@ -5,17 +5,19 @@ import { getSessionConfig } from './config/session.config';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { getLogger } from './config/logger.config';
+import { CacheProvider } from './cache/cache.provider';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  const cacheProvider = app.get(CacheProvider);
 
   app.enableCors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
 
-  app.use(getSessionConfig(configService));
+  app.use(getSessionConfig(configService, cacheProvider));
   app.useLogger(getLogger());
 
   app.useGlobalPipes(

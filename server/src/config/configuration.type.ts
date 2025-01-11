@@ -3,6 +3,7 @@ export interface AppConfig {
   environment: string;
   sessionSecret: string;
   database: DatabaseConfig;
+  cache: CacheConfig;
   anthropic: AnthropicConfig;
 }
 
@@ -18,6 +19,11 @@ export interface DatabaseConfig {
         ca: string;
       }
     | boolean;
+}
+
+export interface CacheConfig {
+  host: string;
+  port: number;
 }
 
 export interface AnthropicConfig {

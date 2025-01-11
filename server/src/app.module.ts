@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { MessageModule } from './modules/message/message.module';
 import { StreamModule } from './modules/stream/stream.module';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StreamModule } from './modules/stream/stream.module';
     ChatModule,
     MessageModule,
     StreamModule,
+    CacheModule,
   ],
   controllers: [AppController],
   providers: [AppService],

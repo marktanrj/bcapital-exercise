@@ -17,6 +17,10 @@ export default (): AppConfig => ({
         }
       : false,
   },
+  cache: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT) || 6379,
+  },
   anthropic: {
     apiKey: process.env.ANTHROPIC_API_KEY,
     model: 'claude-3-5-haiku-latest',

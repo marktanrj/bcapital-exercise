@@ -9,3 +9,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: mark-chatbot-app
+
+  cache:
+    image: redis:7.4.2
+    ports:
+      - 6379:6379
