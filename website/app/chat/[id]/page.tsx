@@ -10,6 +10,7 @@ import { Textarea } from '../../../components/ui/textarea';
 import { PLACEHOLDER_PROMPT } from '../../../constants/constants';
 import { CornerRightUp } from 'lucide-react';
 import { useChatScroll } from '../../../hooks/use-chat-scroll';
+import { ChatMessage } from './chat-message';
 
 export default function ChatWindow() {
   const params = useParams<{ id: string }>()
@@ -73,20 +74,12 @@ export default function ChatWindow() {
         {isPending ? (
           <p className="text-center text-gray-500">Loading messages...</p>
         ) : (
-          messages.map((message, index) => (
-            <div
-              key={message.id}
-              ref={index === messages.length - 1 ? lastMessageRef : null}
-              className={`mb-4 ${
-                message.role === 'assistant' ? 'pl-4' : 'pl-0'
-              }`}
-            >
-              <p className="font-semibold mb-1">
-                {message.role === 'assistant' ? 'Assistant' : 'You'}
-              </p>
-              <p className="whitespace-pre-wrap">{message.content}</p>
-            </div>
-          ))
+          messages.map((message, index) => <ChatMessage
+            key={message.id}
+            message={message}
+            isLastMessage={index === messages.length - 1}
+            lastMessageRef={lastMessageRef} 
+          />)
         )}
       </div>
       <div className='flex justify-center items-center h-36 sticky bottom-0'>

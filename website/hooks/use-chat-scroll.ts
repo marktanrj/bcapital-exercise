@@ -6,7 +6,7 @@ interface UseChatScrollProps {
   threshold?: number;
 }
 
-export function useChatScroll({ messages, threshold = 100 }: UseChatScrollProps) {
+export function useChatScroll({ messages, threshold = 200 }: UseChatScrollProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
