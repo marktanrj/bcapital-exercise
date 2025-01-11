@@ -9,14 +9,11 @@ export class UserRepository {
   constructor(private readonly dbService: DbService) {}
 
   async findByUsername(username: string) {
-    this.logger.log('signup findByUsername 1');
     const user = await this.dbService.db
       .selectFrom('user')
       .where('username', '=', username.toLowerCase())
       .selectAll()
       .executeTakeFirst();
-    this.logger.log('signup findByUsername 2');
-    this.logger.log(`signup ${JSON.stringify(user)}`);
 
     return user;
   }

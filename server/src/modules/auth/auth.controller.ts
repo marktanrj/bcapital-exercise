@@ -14,13 +14,10 @@ export class AuthController {
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto, @Req() req: Request) {
-    this.logger.log('signUp controller');
     const userInfo = await this.authService.signup(signUpDto);
-    this.logger.log('signUp userInfo');
 
     req.session.userId = userInfo.id;
     req.session.username = userInfo.username;
-    this.logger.log('signUp session');
 
     return userInfo;
   }
