@@ -15,6 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: configService.get('frontendUrl'),
     credentials: true,
+    exposedHeaders: ['Set-Cookie'],
   });
 
   app.use(getSessionConfig(configService, cacheProvider));
