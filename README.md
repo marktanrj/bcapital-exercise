@@ -229,6 +229,19 @@ website/
 └── middleware.ts      # Handles protected routes 
 ```
 
+## Design And Usability
+
+1. Text input UI uses Framer Motion for animations
+1. Auto-scrolls to bottom of chat window when new messages are received (if user is near the bottom of the window)
+1. "Enter" shortcut to submit prompt
+
+## Code Quality
+
+1. The frontend uses Next.js app router, components are organized at route-level, APIs are encapsulated into custom hooks.
+
+1. The backend is built with Nest.js, providing a structured MVC architecture with built-in decorators, guards, interceptors, and pipes, for a clean and maintainable codebase.
+
+
 ## Security
 
 1. Secure session management via cookies
