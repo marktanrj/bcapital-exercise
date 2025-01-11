@@ -90,7 +90,7 @@ Ensure you have the following installed:
     pnpm dev
     ```
 
-## Local Links
+## Local development links
 
 1. App: http://localhost:3000
 1. Swagger API Docs: http://localhost:4000/api
@@ -102,6 +102,14 @@ The app is hosted on Railway
 ![Railway Hosting](./images/hosting.jpg)
 
 - Commits pushed to `production` branch will deploy to Railway automatically
+
+## Database Schema Design
+
+![Models](./images/models.jpg)
+
+Relationships
+- One User can have many Chats (1:N)
+- One Chat can have many Messages (1:N)
 
 ## Architecture Diagram
 
