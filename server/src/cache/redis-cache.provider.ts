@@ -15,9 +15,11 @@ export class RedisCacheProvider extends CacheProvider {
     this.client = new Redis(redisConfig.url, {
       ...(redisConfig.url ? {} : { host: redisConfig.host, port: redisConfig.port }),
       retryStrategy: (times) => Math.min(times * 50, 5000),
+      reconnectOnError: (err) => {
+        this.logger.error('Redis reconnect on error:', err);
+        return true;
+      },
     });
-
-    console.log(redisConfig);
 
     this.client.on('error', (error) => {
       this.logger.error('Redis client error:', error);

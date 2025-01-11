@@ -13,7 +13,7 @@ export default (): AppConfig => ({
     database: process.env.DATABASE_NAME,
   },
   cache: {
-    url: process.env.REDIS_URL,
+    url: process.env.REDIS_URL || process.env.REDIS_PRIVATE_URL,
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT) || 6379,
   },
