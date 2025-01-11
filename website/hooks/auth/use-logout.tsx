@@ -23,7 +23,16 @@ export const useLogout = () => {
       authApi.logout(),
     onSuccess: () => {
       setUser(null);
-      deleteCookie('sessionId');
+
+      const isProd = process.env.NODE_ENV === 'production';
+      console.log(process.env.NODE_ENV);
+      deleteCookie('sessionId', {
+        path: '/',
+        domain: isProd ? '.marksite.xyz' : undefined,
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax'
+      });
+
       router.push('/login');
     },
     onError: (error: ApiError) => {

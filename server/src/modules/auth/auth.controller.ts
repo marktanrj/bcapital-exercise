@@ -36,8 +36,28 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@Req() req: Request) {
-    await new Promise((resolve) => req.session.destroy(resolve));
-    return { message: 'Logged out successfully' };
+    try {
+      await new Promise<void>((resolve, reject) => {
+        req.session.destroy((err) => {
+          if (err) reject(err);
+          resolve();
+        });
+      });
+      
+      // Clear the cookie by setting it to expire
+      const isProd = process.env.NODE_ENV === 'production';
+      req.res.clearCookie('sessionId', {
+        path: '/',
+        domain: isProd ? '.marksite.xyz' : undefined,
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax'
+      });
+      
+      return { message: 'Logged out successfully' };
+    } catch (error) {
+      this.logger.error('Logout failed', error);
+      throw error;
+    }
   }
 
   @Get('me')
