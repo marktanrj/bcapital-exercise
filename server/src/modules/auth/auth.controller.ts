@@ -1,15 +1,20 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, SignUpDto } from './auth.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 import { Request } from 'express';
 import { SessionGuard } from './auth.guard';
 import { User } from '../user/user.decorator';
+import { LoginDto } from './dto/login.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService
+  ) {}
 
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
@@ -48,7 +53,7 @@ export class AuthController {
       const isProd = process.env.NODE_ENV === 'production';
       req.res.clearCookie('sessionId', {
         path: '/',
-        domain: isProd ? '.marksite.xyz' : undefined,
+        domain: isProd ? this.configService.get('sessionDomain') : undefined,
         secure: isProd,
         sameSite: isProd ? 'none' : 'lax'
       });

@@ -15,14 +15,3 @@ export class SignUpDto {
   password: string;
 }
 
-export class LoginDto {
-  @IsString()
-  @MinLength(3)
-  @MaxLength(50)
-  @ApiProperty()
-  username: string;
-
-  @IsString()
-  @ApiProperty()
-  password: string;
-}
