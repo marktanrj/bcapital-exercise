@@ -20,7 +20,7 @@ export const getSessionConfig = (configService: ConfigService, cacheProvider: Ca
       httpOnly: true,
       secure: isProd,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      sameSite: 'lax',
+      sameSite: 'none',
       domain: isProd ? '.marksite.xyz' : undefined,
     },
   };
