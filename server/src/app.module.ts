@@ -19,7 +19,7 @@ import { CacheModule } from './cache/cache.module';
     ChatModule,
     MessageModule,
     StreamModule,
-    CacheModule,
+    // CacheModule,
   ],
   controllers: [AppController],
   providers: [AppService],
