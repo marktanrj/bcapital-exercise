@@ -12,19 +12,30 @@ import {
 import { Button } from "../../components/ui/button"
 import { useLogout } from "../../hooks/auth/use-logout";
 import { Chat } from "../../api/chat-api";
-import { useChats } from "../../hooks/chat";
+import { chatsQueryKey, useChats } from "../../hooks/chat";
 import { useParams, useRouter } from "next/navigation";
 import { ChatMenuButton } from "./chat-menu-button";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function AppSidebar() {
+  const queryClient = useQueryClient();
   const { logout } = useLogout();
   const router = useRouter();
   const params = useParams();
+  const chatId = params?.id;
 
   const { 
     data: chats, 
     isLoading, 
   } = useChats(30);
+
+  // refresh chats if chatId changes, since new chat is added
+  useEffect(() => {
+    if (chatId) {
+      queryClient.refetchQueries({ queryKey: chatsQueryKey });
+    }
+  }, [chatId, queryClient]);
 
   const handleNewChat = () => {
     router.push('/chat');
