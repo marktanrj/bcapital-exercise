@@ -19,6 +19,7 @@ export class AuthService {
       if (existingUser) {
         throw new ConflictException('Username already exists');
       }
+      this.logger.log('signup throw exception');
 
       const hashedPassword = await bcrypt.hash(signUp.password, 10);
       this.logger.log('signup hashedPassword');
