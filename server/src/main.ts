@@ -16,6 +16,8 @@ async function bootstrap() {
     origin: configService.get('frontendUrl'),
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'],
   });
 
   app.use(getSessionConfig(configService, cacheProvider));

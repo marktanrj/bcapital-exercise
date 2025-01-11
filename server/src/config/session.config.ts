@@ -16,12 +16,14 @@ export const getSessionConfig = (configService: ConfigService, cacheProvider: Ca
     secret: configService.getOrThrow('sessionSecret'),
     resave: false,
     saveUninitialized: false,
+    proxy: isProd,
     cookie: {
       httpOnly: true,
       secure: isProd,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      sameSite: 'none',
+      sameSite: isProd ? 'none' : 'lax',
       domain: isProd ? '.marksite.xyz' : null,
+      path: '/',
     },
   };
 
