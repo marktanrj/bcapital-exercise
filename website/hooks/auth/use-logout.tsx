@@ -22,7 +22,7 @@ export const useLogout = () => {
       authApi.logout(),
     onSuccess: () => {
       setUser(null);
-      router.push('/');
+      router.push('/login');
     },
     onError: (error: ApiError) => {
       const errorMessage = error.response?.data?.message ?? 'Log out error';
