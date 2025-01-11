@@ -1,17 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from '../../database/db.service';
 import { NewUser, UserRole } from './user.model';
 
 @Injectable()
 export class UserRepository {
+  private readonly logger = new Logger(UserRepository.name);
+
   constructor(private readonly dbService: DbService) {}
 
   async findByUsername(username: string) {
+    this.logger.log('signup findByUsername 1');
     const user = await this.dbService.db
       .selectFrom('user')
       .where('username', '=', username.toLowerCase())
       .selectAll()
       .executeTakeFirst();
+    this.logger.log('signup findByUsername 2');
+    this.logger.log(`signup ${JSON.stringify(user)}`);
 
     return user;
   }
