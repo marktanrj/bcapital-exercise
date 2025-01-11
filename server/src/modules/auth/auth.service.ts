@@ -11,18 +11,23 @@ export class AuthService {
 
   async signup(signUp: SignUpDto) {
     try {
+      this.logger.log('signup called');
+
       const existingUser = await this.userRepository.findByUsername(signUp.username);
+      this.logger.log('signup findByUsername');
 
       if (existingUser) {
         throw new ConflictException('Username already exists');
       }
 
       const hashedPassword = await bcrypt.hash(signUp.password, 10);
+      this.logger.log('signup hashedPassword');
 
       const user = await this.userRepository.create({
         username: signUp.username,
         hashedPassword,
       });
+      this.logger.log('signup create user');
 
       return {
         id: user.id,

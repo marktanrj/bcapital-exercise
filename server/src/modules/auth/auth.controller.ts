@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, SignUpDto } from './auth.dto';
 import { Request } from 'express';
@@ -7,15 +7,20 @@ import { User } from '../user/user.decorator';
 
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(private authService: AuthService) {}
 
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto, @Req() req: Request) {
+    this.logger.log('signUp controller');
     const userInfo = await this.authService.signup(signUpDto);
+    this.logger.log('signUp userInfo');
 
     req.session.userId = userInfo.id;
     req.session.username = userInfo.username;
+    this.logger.log('signUp session');
 
     return userInfo;
   }
