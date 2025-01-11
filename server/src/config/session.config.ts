@@ -22,7 +22,7 @@ export const getSessionConfig = (configService: ConfigService, cacheProvider: Ca
       secure: isProd,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       sameSite: isProd ? 'none' : 'lax',
-      domain: isProd ? '.marksite.xyz' : null,
+      domain: isProd ? configService.getOrThrow('sessionDomain') : null,
       path: '/',
     },
   };

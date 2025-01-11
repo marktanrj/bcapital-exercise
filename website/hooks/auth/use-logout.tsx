@@ -27,7 +27,7 @@ export const useLogout = () => {
       const isProd = process.env.NODE_ENV === 'production';
       deleteCookie('sessionId', {
         path: '/',
-        domain: isProd ? '.marksite.xyz' : undefined,
+        domain: isProd ? process.env.SESSION_DOMAIN : undefined,
         secure: isProd,
         sameSite: isProd ? 'none' : 'lax'
       });
