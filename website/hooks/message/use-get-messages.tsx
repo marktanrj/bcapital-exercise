@@ -1,3 +1,5 @@
+"use client"
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { messageApi } from '../../api/message-api';
 import { Message } from 'ai/react';

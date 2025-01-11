@@ -1,3 +1,5 @@
+"use client"
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Chat, chatApi } from '../../api/chat-api';
 

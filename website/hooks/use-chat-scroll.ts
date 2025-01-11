@@ -1,3 +1,5 @@
+"use client"
+
 import { Message } from 'ai/react';
 import { useEffect, useRef } from 'react';
 
