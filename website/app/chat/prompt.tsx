@@ -10,7 +10,10 @@ import { useCreateChat } from "../../hooks/chat/use-create-chat";
 import { format } from "date-fns";
 import { useChatShared } from "../../providers/chat-provider";
 import { PLACEHOLDER_PROMPT } from "../../constants/constants";
+import { motion } from "framer-motion";
 
+const MotionCard = motion(Card);
+const MotionTextarea = motion(Textarea);
 const MAX_HEIGHT = 300;
 
 export default function Prompt() {
@@ -56,8 +59,14 @@ export default function Prompt() {
   };
 
   return (
-    <Card className="w-full grid grid-cols-[1fr_40px] p-5 md:w-[600px] border-[1.5px] shadow-xl">
-      <Textarea
+    <MotionCard 
+      layout
+      layoutId="shared-textarea-card"
+      className="w-full grid grid-cols-[1fr_40px] p-5 md:w-[600px] border-[1.5px] shadow-xl"
+    >
+      <MotionTextarea
+        layout
+        layoutId="shared-textarea"
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -80,6 +89,6 @@ export default function Prompt() {
           <CornerRightUp className="w-4 h-11" />
         </Button>
       )}
-    </Card>
+    </MotionCard>
   );
 }
