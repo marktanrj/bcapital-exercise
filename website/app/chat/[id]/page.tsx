@@ -9,9 +9,11 @@ import { Card } from '../../../components/ui/card';
 import { Textarea } from '../../../components/ui/textarea';
 import { PLACEHOLDER_PROMPT } from '../../../constants/constants';
 import { CornerRightUp } from 'lucide-react';
+import { useChatScroll } from '../../../hooks/use-chat-scroll';
 
 export default function ChatWindow() {
   const params = useParams<{ id: string }>()
+  const isInitialMount = useRef(true);
 
   const {
     setMessages,
@@ -23,9 +25,9 @@ export default function ChatWindow() {
     setChatId,
     isLoading,
   } = useChatShared();
-  const { mutate: getMessages, isPending } = useGetMessages();
 
-  const isInitialMount = useRef(true);
+  const { mutate: getMessages, isPending } = useGetMessages();
+  const { messagesContainerRef, lastMessageRef } = useChatScroll({ messages });
 
   // reset chatId and remove messages
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function ChatWindow() {
       setMessages([]);
       setChatId(params.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // if user submits a new prompt from prompt page
@@ -41,6 +44,7 @@ export default function ChatWindow() {
       handleSubmit();
     }
     isInitialMount.current = false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // populate old messages
@@ -61,14 +65,18 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 h-full">
-      <div className="rounded-lg p-4 mb-4 overflow-y-auto h-full">
+    <div className="flex flex-col max-w-4xl mx-auto p-4">
+      <div 
+        ref={messagesContainerRef}
+        className="rounded-lg p-4 mb-4 overflow-y-auto h-full"
+      >
         {isPending ? (
           <p className="text-center text-gray-500">Loading messages...</p>
         ) : (
-          messages.map((message) => (
+          messages.map((message, index) => (
             <div
               key={message.id}
+              ref={index === messages.length - 1 ? lastMessageRef : null}
               className={`mb-4 ${
                 message.role === 'assistant' ? 'pl-4' : 'pl-0'
               }`}
