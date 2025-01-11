@@ -46,7 +46,7 @@ export default function ChatWindow() {
       isInitialMount.current = false;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chatId]);
 
   // populate old messages
   useEffect(() => {
