@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/api/auth-api';
 import { useAuthStore } from "@/store/auth-store";
+import { deleteCookie } from 'cookies-next/client';
 
 type ApiError = {
   response?: {
@@ -22,6 +23,7 @@ export const useLogout = () => {
       authApi.logout(),
     onSuccess: () => {
       setUser(null);
+      deleteCookie('sessionId');
       router.push('/login');
     },
     onError: (error: ApiError) => {
