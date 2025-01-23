@@ -1,7 +1,8 @@
 
 # ChatGPT Clone
 
-Simple chat app built with Next.js, Nest.js, PostgreSQL, Redis, and Vercel AI SDK.
+&nbsp;
+<img src="./images/demo.jpg" width="600" height="355" alt="Demo" />
 
 ## Prerequisites
 Ensure you have the following installed:
