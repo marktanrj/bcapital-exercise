@@ -1,12 +1,7 @@
 
-# Chatbot App - B Capital Exercise
+# ChatGPT Clone
 
-Live app: https://app.marksite.xyz/
-
-Sample Login - *Username:* `john`, *Password:* `123456`
-
-&nbsp;
-<img src="./images/demo.jpg" width="600" height="355" alt="Demo" />
+Simple chat app built with Next.js, Nest.js, PostgreSQL, Redis, and Vercel AI SDK.
 
 ## Prerequisites
 Ensure you have the following installed:
@@ -94,14 +89,6 @@ Ensure you have the following installed:
 
 1. App: http://localhost:3000
 1. Swagger API Docs: http://localhost:4000/api
-
-## Deployment
-
-The app is hosted on Railway
-
-![Railway Hosting](./images/hosting.jpg)
-
-- Commits pushed to `production` branch will deploy to Railway automatically
 
 ## Database Schema Design
 
@@ -241,32 +228,3 @@ website/
 ├── .env.example
 └── middleware.ts      # Handles protected routes 
 ```
-
-## Design And Usability
-
-1. Text input UI uses Framer Motion for animations
-1. Auto-scrolls to bottom of chat window when new messages are received (if user is near the bottom of the window)
-1. "Enter" shortcut to submit prompt
-
-## Code Quality
-
-1. The frontend uses Next.js app router, components are organized at route-level, APIs are encapsulated into custom hooks.
-
-1. The backend is built with Nest.js, providing a structured MVC architecture with built-in decorators, guards, interceptors, and pipes, for a clean and maintainable codebase.
-
-
-## Security
-
-1. Secure session management via cookies
-1. Server-side data validation using DTOs and class-validator
-1. Protected API routes with NestJS guards
-1. Configured CORS policy for API endpoints
-1. Client-side route protection using Next.js middleware
-
-## Future considerations
-
-Planned but not implemented due to time constraints:
-- Lint staged commits with Husky for enforced code style
-- Automated testing via CI pipeline like Github actions
-- Frontend Testing with Cypress/Jest
-- Better OOP/SOLID patterns in backend, database models and interfaces could follow Dependency Inversion Principle
